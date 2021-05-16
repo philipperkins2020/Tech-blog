@@ -24,11 +24,15 @@ Comment.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-  },
+  
     
     
     sequelize,
-  
+    timestamps: false,
+    freezeTableName: true,
+    underscored: true,
+    modelName: 'user',
+}
 );
 
-module.exports = Post;
+module.exports = Comment;
