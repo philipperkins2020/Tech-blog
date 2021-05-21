@@ -23,7 +23,7 @@ router.get('/login', (req, res) => {
 //localhost3001 sign up
 router.get('/newuser', (req, res) => {
     if (req.session.logged_in) {
-        res.redirect('/mySafe');
+        res.redirect('/mydash');
         return;
     }
     res.render('newuser');
@@ -44,9 +44,42 @@ router.get('/logout', (req, res) => {
 
 //localhost 3001 blog post/id
 
+router.get('/post/:id', async (req, res) => {
+    try {
+      const postData = await Post.findByPk(req.params.id, {
+        include: [
+          User,
+          {
+            model: Comment,
+            include: [User],
+          },
+        ],
+      });
+  
+      if (postData) {
+        const post = postData.get({ plain: true });
+  
+        res.render('individual-post', { post });
+      } else {
+        res.status(404).end();
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
 
-
-
+  router.get('/post/:id', (req, res) => {
+    res.render('singlepost')
+    }); 
+    
+    
+    router.get('/create', (req, res) => {
+    res.render('newpost')
+    }); 
+    
+    router.get('/edit', (req, res) => {
+    res.render('edit-post')
+    }); 
 
 
 module.exports = router
