@@ -28,6 +28,14 @@ router.get('/newuser', (req, res) => {
     }
     res.render('newuser');
 });
+
+router.get('/singlepost', (req, res) => {
+    if (req.session.logged_in) {
+        res.redirect('/mydash');
+        return;
+    }
+    res.render('singlepost');
+});
 //localhost3001 dashboard
 
 //localhost3001 log out
