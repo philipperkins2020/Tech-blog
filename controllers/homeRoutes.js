@@ -80,6 +80,31 @@ router.get('/logout', (req, res) => {
 });
 
 //localhost 3001 blog post/id
+router.get("/editinventory/:id", withAuth, async (req, res) => {
+    try {
+        const persData = await Personal.findByPk(req.params.id, {
+            attributes: ["id",
+                        "title",
+                        "body"
+                    ],
+            include: [
+                {
+                    model: User,
+                    attributes: ["username"],
+                },
+                
+            ],
+        });
+
+        const personal = persData.get({ plain: true });
+
+        res.render("editinventory", { personal, logged_in: req.session.logged_in });
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+
 
 router.get('/post/:id', async (req, res) => {
     try {
@@ -110,7 +135,7 @@ router.get('/post/:id', (req, res) => {
 });
 
 
-router.get('/create', (req, res) => {
+router.get('/newpost', (req, res) => {
     res.render('newpost')
 });
 
