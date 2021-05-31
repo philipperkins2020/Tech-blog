@@ -1,7 +1,7 @@
 
 
 const router = require('express').Router()
-
+const {Post} = require('../models')
 
 
 
@@ -43,30 +43,26 @@ router.get('/singlepost', (req, res) => {
 //localhost3001 log out
 
 router.get('/dashboard', async (req, res) => {
-   //get the posts
-   try{
-    const postData = await Post.findAll({
-        include: [
-            User,
-            {
-                model: Comment,
-                include: [User],
-            },
-        ],
-    });
-    if (postData) {
+    //get the posts
+    try { 
+        console.log(req.session)
+      const postData = await Post.findAll({
+        where: {
+            userId: req.session.user_id
+          }
+      });
+      console.log(postData);
+      if (postData) {
         const posts = postData.map((post) => post.get({ plain: true }));
-console.log(posts)
         res.render('homepage', { posts });
-    } else {
+      } else {
         res.status(404).end();
+      }
+    } catch (err) {
+      res.status(500).json(err);
     }
-   } catch(err){
-       res.status(500).json(err);
-}
-   //render the posts
-   
-})
+    //render the posts
+  });
 
 router.get('/logout', (req, res) => {
     if (req.session.logged_in) {
@@ -80,25 +76,15 @@ router.get('/logout', (req, res) => {
 });
 
 //localhost 3001 blog post/id
-router.get("/editinventory/:id", withAuth, async (req, res) => {
+router.get("/edit/:id",  async (req, res) => {
     try {
-        const persData = await Personal.findByPk(req.params.id, {
-            attributes: ["id",
-                        "title",
-                        "body"
-                    ],
-            include: [
-                {
-                    model: User,
-                    attributes: ["username"],
-                },
-                
-            ],
+        const persData = await Post.findByPk(req.params.id, {
+        
         });
 
-        const personal = persData.get({ plain: true });
+        const post = persData.get({ plain: true });
 
-        res.render("editinventory", { personal, logged_in: req.session.logged_in });
+        res.render("edit-post", { post});
     } catch (err) {
         res.status(500).json(err);
     }
@@ -109,19 +95,13 @@ router.get("/editinventory/:id", withAuth, async (req, res) => {
 router.get('/post/:id', async (req, res) => {
     try {
         const postData = await Post.findByPk(req.params.id, {
-            include: [
-                User,
-                {
-                    model: Comment,
-                    include: [User],
-                },
-            ],
+          
         });
 
         if (postData) {
             const post = postData.get({ plain: true });
 
-            res.render('individual-post', { post });
+            res.render('singlepost', { post });
         } else {
             res.status(404).end();
         }
@@ -129,19 +109,10 @@ router.get('/post/:id', async (req, res) => {
         res.status(500).json(err);
     }
 });
+router.get("/newpost",(req, res) => {
+    res.render("newpost")
+})
 
-router.get('/post/:id', (req, res) => {
-    res.render('singlepost')
-});
-
-
-router.get('/newpost', (req, res) => {
-    res.render('newpost')
-});
-
-router.get('/edit', (req, res) => {
-    res.render('edit-post')
-});
 
 
 module.exports = router

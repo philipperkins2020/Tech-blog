@@ -1,7 +1,18 @@
-<div class="card" style="width: 18rem;">
-  <div class="card-body">
-    <h5 class="card-title">Special title treatment</h5>
-    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
+<form class="addpost">
+  <div class="row mb-3">
+    <label for="title" class="col-sm-2 col-form-label">Title</label>
+    <div class="col-sm-10">
+      <input type="title" class="form-control" id="title">
+    </div>
   </div>
-</div>
+  <div class="row mb-3">
+    <label for="body" class="col-sm-2 col-form-label">Body</label>
+    <div class="col-sm-10">
+      <input type="body" class="form-control" id="body">
+    </div>
+  </div>
+ 
+  <button type="submit" class="btn btn-primary">Add Post</button>
+</form>
+
+<script src="/js/newpost.js"></script>

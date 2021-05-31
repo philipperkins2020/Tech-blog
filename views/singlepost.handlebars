@@ -1,10 +1,9 @@
 <div class="card">
-  <div class="card-header">
-    Featured
-  </div>
+  
   <div class="card-body">
-    <h5 class="card-title">Special title treatment</h5>
-    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-    <a href="#" class="btn btn-primary">Go back to all posts</a>
+    <h5 class="card-title">{{post.title}}</h5>
+    <p class="card-text">{{post.body}}</p>
+    <a href="/dashboard" class="btn btn-primary">Go back to all posts</a>
+    <a href="/edit/{{post.id}}" class="btn btn-primary">Edit posts</a>
   </div>
 </div>
